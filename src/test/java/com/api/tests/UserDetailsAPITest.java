@@ -17,7 +17,7 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 
 import static io.restassured.RestAssured.*;
 
-public class UserDetailsAPIRequest {
+public class UserDetailsAPITest {
 	
 	@Test
 	public void userDetailsAPIRequest() throws IOException{
