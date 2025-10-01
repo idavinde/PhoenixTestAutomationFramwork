@@ -3,11 +3,10 @@ package com.api.tests;
 import static org.hamcrest.Matchers.*;
 import org.testng.annotations.Test;
 
-import com.api.constants.Role;
-import com.api.utils.AuthTokenProvider;
-import com.api.utils.ConfigManager;
+import static com.api.constants.Role.*;
+import com.api.utils.SpecUtil;
 
-import io.restassured.http.ContentType.*;
+
 import io.restassured.module.jsv.JsonSchemaValidator;
 
 import static io.restassured.RestAssured.*;
@@ -18,18 +17,11 @@ public class MasterAPITest {
 	public void verifyMasterAPIResponse() {
 		
 		given()
-			.baseUri(ConfigManager.getProperty("BASE_URI"))
-			.and()
-			.header("Authorization" , AuthTokenProvider.getToken(Role.FD))
-			.and()
-			.contentType("")
-			.log().all()
+			.spec(SpecUtil.requestSpecWithAuth(FD))
 			.when()
 			.post("master")
 			.then()
-			.log().all()
-			.statusCode(200)
-			.time(lessThan(2000L)) // time should be less than 500ms
+			.spec(SpecUtil.responsSpec_OK())
 			.body("message", equalTo("Success"))
 			.body("data", notNullValue())
 			.body("data", hasKey("mst_oem"))
@@ -47,17 +39,11 @@ public class MasterAPITest {
 	public void invalidTokenMasterAPI() {
 		
 		given()
-		.baseUri(ConfigManager.getProperty("BASE_URI"))
-		.and()
-		.header("Authorization" ," ")
-		.and()
-		.contentType("")
-		.log().all()
+		.spec(SpecUtil.requestSpec())
 		.when()
 		.post("master")
 		.then()
-		.log().all()
-		.statusCode(401);
+		.spec(SpecUtil.responsSpec_TEXT(401));
 	}
 
 }
