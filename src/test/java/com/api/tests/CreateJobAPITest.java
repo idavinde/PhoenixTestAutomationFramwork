@@ -8,11 +8,12 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.api.constants.Role;
-import com.api.pojo.CreateJobPayload;
-import com.api.pojo.Customer;
-import com.api.pojo.CustomerAddress;
-import com.api.pojo.CustomerProduct;
-import com.api.pojo.Problems;
+import com.api.request.model.CreateJobPayload;
+import com.api.request.model.Customer;
+import com.api.request.model.CustomerAddress;
+import com.api.request.model.CustomerProduct;
+import com.api.request.model.Problems;
+import static com.api.utils.DateTimeUtil.*;
 import com.api.utils.SpecUtil;
 
 import io.restassured.module.jsv.JsonSchemaValidator;
@@ -29,7 +30,7 @@ public class CreateJobAPITest {
 		Customer customer = new Customer("Jatin", "Sharma", "7293847564", "", "jatin@gmail.com", "");
 		CustomerAddress customerAddress = new CustomerAddress("D404", "Vasant galaxy", "Bangur", "Inorbit", "Mumbai", "411039", "INDIA", "MAHARASHTRA");
 		
-		CustomerProduct customerProduct = new CustomerProduct("2025-08-05T07:00:00.000Z", "19771422184332", "19771422184332", "19771422184332", "2025-08-05T07:00:00.000Z", 1, 1);
+		CustomerProduct customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "19771422154332", "19771422154332", "19771422154332", getTimeWithDaysAgo(10), 1, 1);
 		Problems problems = new Problems(1,"Battery Issue");
 		List<Problems> problemList = new ArrayList<Problems>();
 		problemList.add(problems);
