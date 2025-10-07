@@ -4,24 +4,24 @@ import static org.hamcrest.Matchers.*;
 import org.testng.annotations.Test;
 
 import static com.api.constants.Role.*;
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 
 
-import io.restassured.module.jsv.JsonSchemaValidator;
+import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 
 public class MasterAPITest {
 	
-	@Test
+	@Test (description="Verify if the master API is giving correct response", groups= {"api","regression","smoke"})
 	public void verifyMasterAPIResponse() {
 		
 		given()
-			.spec(SpecUtil.requestSpecWithAuth(FD))
+			.spec(requestSpecWithAuth(FD))
 			.when()
 			.post("master")
 			.then()
-			.spec(SpecUtil.responsSpec_OK())
+			.spec(responsSpec_OK())
 			.body("message", equalTo("Success"))
 			.body("data", notNullValue())
 			.body("data", hasKey("mst_oem"))
@@ -31,19 +31,19 @@ public class MasterAPITest {
 			.body("data.mst_model.size()", greaterThan(0))
 			.body("data.mst_oem.id", everyItem(notNullValue()))
 			.body("data.mst_oem.name", everyItem(notNullValue()))
-			.body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/MasterAPIResponseSchema"));
+			.body(matchesJsonSchemaInClasspath("response-schema/MasterAPIResponseSchema"));
 		
 	}
 	
-	@Test
+	@Test (description="Verify if the master API is giving correct status code for invalid token", groups= {"api","neagtive","regression","smoke"})
 	public void invalidTokenMasterAPI() {
 		
 		given()
-		.spec(SpecUtil.requestSpec())
+		.spec(requestSpec())
 		.when()
 		.post("master")
 		.then()
-		.spec(SpecUtil.responsSpec_TEXT(401));
+		.spec(responsSpec_TEXT(401));
 	}
 
 }
