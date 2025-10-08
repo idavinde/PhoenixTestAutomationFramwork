@@ -4,8 +4,8 @@ name: Phoenix Test Automation Framework
 on:
   push:
     branches: 
-     -master
-     -feature/r7-create-job-api"
+      - master
+      - feature/r7-create-job-api
      
   pull_request:
     branches: [ "master" ]
