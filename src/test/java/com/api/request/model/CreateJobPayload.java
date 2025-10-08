@@ -1,7 +1,7 @@
 package com.api.request.model;
 
 import java.util.List;
-   
+    
 public record CreateJobPayload 
 	(
 	 int mst_service_location_id,
