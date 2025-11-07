@@ -42,6 +42,8 @@ public class FakerDataGenerator {
 	public static Iterator<CreateJobPayload> generateFakeCreateJobData(int count) {
 		
 		List<CreateJobPayload> payloadList = new ArrayList<>();
+		
+		
 		for (int i = 0; i < count; i++) {
 			Customer customer = generateFakeCustomerData();
 			CustomerAddress customerAddress = generateFakeCustomerAddressData();
@@ -56,16 +58,20 @@ public class FakerDataGenerator {
 
 	private static List<Problems> generateFakeProblemsList() {
 		
-	
-		String fakeRemark = faker.lorem().sentence(5);
-		int randomIndex= RANDOM.nextInt(VALID_PROBLEM_ID.length);
-		int problemId = VALID_PROBLEM_ID[randomIndex];
-
-		Problems problems = new Problems(problemId, fakeRemark);
-
+		int count = RANDOM.nextInt(3)+1;
+		String fakeRemark;
+		int randomIndex;
+		int problemId;
+		Problems problems;
 		List<Problems> problemList = new ArrayList<Problems>();
-		problemList.add(problems);
+		for(int i=1;i<=count;i++) {
+		 fakeRemark = faker.lorem().sentence(5);
+		 randomIndex= RANDOM.nextInt(VALID_PROBLEM_ID.length);
+		 problemId = VALID_PROBLEM_ID[randomIndex];
 
+		 problems = new Problems(problemId, fakeRemark);
+		 problemList.add(problems);
+		}
 		return problemList;
 	}
 
