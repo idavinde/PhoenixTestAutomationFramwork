@@ -30,7 +30,7 @@ import static io.restassured.RestAssured.*;
 
 public class CreateJobAPIDataDrivenTest {
 	
-	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke"},
+	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","csv"},
 			dataProviderClass= com.dataproviders.DataProviderUtils.class,
 			dataProvider= "CreateJobAPIDataProvider")
 	public void createJobAPITest(CreateJobPayload createJobPayload ) {

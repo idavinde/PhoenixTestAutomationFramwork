@@ -1,4 +1,4 @@
-package com.api.tests;
+package com.api.tests.datadriven;
 
 import static org.hamcrest.Matchers.*;
 
@@ -33,7 +33,7 @@ public class CreateJobAPIFakeDataDrivenTest {
 
 	
 	
-	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke"},
+	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","faker"},
 			dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "createJobAPIFakerDataProvider")
 	public void createJobAPITEst(CreateJobPayload createJobPayload) {
 		
