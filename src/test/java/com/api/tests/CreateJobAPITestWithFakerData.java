@@ -1,4 +1,4 @@
-package com.api.tests.datadriven;
+package com.api.tests;
 
 import static org.hamcrest.Matchers.*;
 
@@ -21,6 +21,8 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
+import com.api.utils.FakerDataGenerator;
+
 import static com.api.utils.DateTimeUtil.*;
 import static com.api.utils.SpecUtil.*;
 
@@ -28,12 +30,23 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 
-public class CreateJobAPIDataDrivenTest {
+public class CreateJobAPITestWithFakerData {
 	
-	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","csv"},
-			dataProviderClass= com.dataproviders.DataProviderUtils.class,
-			dataProvider= "CreateJobAPIDataProvider")
-	public void createJobAPITest(CreateJobPayload createJobPayload ) {
+	private CreateJobPayload createJobPayload;
+	
+	@BeforeMethod (description= "Creating creatjob api request payload")
+	public void setup() {
+		
+		
+		
+	   createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
+		
+	}
+	
+	
+	
+	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke"})
+	public void createJobAPITEst() {
 		
 		given()
 			.spec(requestSpecWithAuth(Role.FD, createJobPayload))
