@@ -1,0 +1,131 @@
+[
+  {
+    "mst_service_location_id": 0,
+    "mst_platform_id": 2,
+    "mst_warrenty_status_id": 1,
+    "mst_oem_id": 2,
+    "customer": {
+      "first_name": "Justice",
+      "last_name": "Conn",
+      "mobile_number": "849-734-3694",
+      "mobile_number_alt": "849-734-3694",
+      "email_id": "Jennifer.Walter@yahoo.com",
+      "email_id_alt": ""
+    },
+    "customer_address": {
+      "flat_number": "23",
+      "apartment_name": "ASDFQW",
+      "street_name": "JASKJD",
+      "landmark": "WSKJDF",
+      "area": "N CA",
+      "pincode": "432323",
+      "country": "India",
+      "state": "Assam"
+    },
+    "customer_product": {
+      "dop": "2025-08-05T07:00:00.000Z",
+      "serial_number": "56110789034127",
+      "imei1": "56110789034127",
+      "imei2": "56110789034127",
+      "popurl": "2025-08-05T07:00:00.000Z",
+      "product_id": 3,
+      "mst_model_id": 3
+    },
+    "problems": [
+      {
+        "id": 2,
+        "remark": "ASDGW34T"
+      },
+      {
+        "id": 1,
+        "remark": "Not Working"
+      }
+    ]
+  },
+  {
+    "mst_service_location_id": 0,
+    "mst_platform_id": 2,
+    "mst_warrenty_status_id": 1,
+    "mst_oem_id": 2,
+    "customer": {
+      "first_name": "Justice",
+      "last_name": "Conn",
+      "mobile_number": "849-734-3694",
+      "mobile_number_alt": "849-734-3694",
+      "email_id": "Jennifer.Walter@yahoo.com",
+      "email_id_alt": ""
+    },
+    "customer_address": {
+      "flat_number": "23",
+      "apartment_name": "ASDFQW",
+      "street_name": "JASKJD",
+      "landmark": "WSKJDF",
+      "area": "N CA",
+      "pincode": "432323",
+      "country": "India",
+      "state": "Assam"
+    },
+    "customer_product": {
+      "dop": "2025-08-05T07:00:00.000Z",
+      "serial_number": "86910789034078",
+      "imei1": "86910789034078",
+      "imei2": "86910789034078",
+      "popurl": "2025-08-05T07:00:00.000Z",
+      "product_id": 3,
+      "mst_model_id": 3
+    },
+    "problems": [
+      {
+        "id": 2,
+        "remark": "ASDGW34T"
+      },
+      {
+        "id": 1,
+        "remark": "Not Working"
+      }
+    ]
+  },
+  {
+    "mst_service_location_id": 0,
+    "mst_platform_id": 2,
+    "mst_warrenty_status_id": 1,
+    "mst_oem_id": 2,
+    "customer": {
+      "first_name": "Justice",
+      "last_name": "Conn",
+      "mobile_number": "849-734-3694",
+      "mobile_number_alt": "849-734-3694",
+      "email_id": "Jennifer.Walter@yahoo.com",
+      "email_id_alt": ""
+    },
+    "customer_address": {
+      "flat_number": "23",
+      "apartment_name": "ASDFQW",
+      "street_name": "JASKJD",
+      "landmark": "WSKJDF",
+      "area": "N CA",
+      "pincode": "432323",
+      "country": "India",
+      "state": "Assam"
+    },
+    "customer_product": {
+      "dop": "2025-08-05T07:00:00.000Z",
+      "serial_number": "56110789034078",
+      "imei1": "56110789034078",
+      "imei2": "56110789034078",
+      "popurl": "2025-08-05T07:00:00.000Z",
+      "product_id": 3,
+      "mst_model_id": 3
+    },
+    "problems": [
+      {
+        "id": 2,
+        "remark": "ASDGW34T"
+      },
+      {
+        "id": 1,
+        "remark": "Not Working"
+      }
+    ]
+  }
+]
