@@ -28,7 +28,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 
-public class CreateJobAPIJsonDataDrivenTest2 {
+public class CreateJobAPIJsonDataDrivenTest {
 	
 
 	
