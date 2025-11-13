@@ -13,17 +13,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.api.request.model.UserCredentials;
+import com.dataproviders.api.bean.UserBean;
+import com.poiji.bind.Poiji;
 
 public class ExcelReaderUtil2 {
 
 	private ExcelReaderUtil2() {
 		
 	}
-	public static Iterator<UserCredentials> loadTestData()  {
+	public static <T> Iterator<T> loadTestData(String pathOfExcelFile,String sheetName, Class<T> clazz)  {
 		// Apache POI OOXML LIB
 
 		InputStream input = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("testData/PhoenixTestData.xlsx");
+				.getResourceAsStream(pathOfExcelFile);
 		XSSFWorkbook myWorkbook=null;
 		try {
 			myWorkbook = new XSSFWorkbook(input);
@@ -34,47 +36,15 @@ public class ExcelReaderUtil2 {
 
 		// Focus on the sheet
 
-		XSSFSheet mySheet = myWorkbook.getSheet("LoginTestData");
+		XSSFSheet mySheet = myWorkbook.getSheet(sheetName);
 
-		XSSFRow myRow;
-		XSSFCell myCell;
-
-		// Want to know the index for the username and password in our sheet.
-		XSSFRow header = mySheet.getRow(0);
-
-		int usernameIndex = -1;
-		int passwordIndex = -1;
-
-		for (Cell cell : header) {
-
-			if (cell.getStringCellValue().trim().equalsIgnoreCase("username")) {
-
-				usernameIndex = cell.getColumnIndex();
-			}
-
-			if (cell.getStringCellValue().trim().equalsIgnoreCase("password")) {
-
-				passwordIndex = cell.getColumnIndex();
-			}
-		}
 		
-		System.out.println(usernameIndex+ "  "+  passwordIndex);
+		List<T>dataList =Poiji.fromExcel(mySheet, clazz);
+		return dataList.iterator();
 		
-		int lastRowIndex = mySheet.getLastRowNum();
-		XSSFRow rowData;
-		UserCredentials userCredentials;
-		List<UserCredentials> list= new ArrayList<UserCredentials>();
 		
-		for(int rowIndex=1 ; rowIndex<=lastRowIndex;rowIndex++) {
-			
-			rowData= mySheet.getRow(rowIndex);
-			
-			userCredentials = new UserCredentials(rowData.getCell(usernameIndex).toString(), rowData.getCell(passwordIndex).toString());
-			list.add(userCredentials);
-			
-		}
-		
-		return list.iterator();
 	}
+	
+	
 
 }
