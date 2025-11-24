@@ -28,11 +28,11 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 
-public class CreateJobAPIExcelDataDrivenTest {
+public class CreateJobAPIDBDataDrivenTest {
 	
 	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","csv"},
 			dataProviderClass= com.dataproviders.DataProviderUtils.class,
-			dataProvider= "CreateJobAPIDBDataProvider")
+			dataProvider= "CreateJobAPIExcelDataProvider")
 	public void createJobAPITest(CreateJobPayload createJobPayload ) {
 		
 		given()
