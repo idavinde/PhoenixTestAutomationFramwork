@@ -25,9 +25,11 @@ import com.api.request.model.Problems;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
+import com.database.dao.MapjobProblemDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.MapJobProblemModel;
 
 import io.restassured.response.Response;
 
@@ -39,57 +41,61 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static io.restassured.RestAssured.*;
 
 public class CreateJobAPIWithDBValidationTest {
-	
+
 	private CreateJobPayload createJobPayload;
 	private Customer customer;
 	private CustomerAddress customerAddress;
-	private CustomerProduct customerProduct ;
-	
-	@BeforeMethod (description= "Creating creatjob api request payload")
+	private CustomerProduct customerProduct;
+
+	@BeforeMethod(description = "Creating creatjob api request payload")
 	public void setup() {
-		
-		 customer = new Customer("Jatin", "Sharma", "7293847564", "", "jatin@gmail.com", "");
-		 customerAddress = new CustomerAddress("D404", "Vasant galaxy", "Bangur", "Inorbit", "Mumbai", "411039", "INDIA", "MAHARASHTRA");
-		
-		 customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "19510430159232", "19510430159232", "19510430159232", getTimeWithDaysAgo(10), Product.Nexus_2.getCode(), Model.NEXUS_2_BLUE.getCode());
-		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(),"Battery Issue");
+
+		customer = new Customer("Jatin", "Sharma", "7293847564", "", "jatin@gmail.com", "");
+		customerAddress = new CustomerAddress("D404", "Vasant galaxy", "Bangur", "Inorbit", "Mumbai", "411039", "INDIA",
+				"MAHARASHTRA");
+
+		customerProduct = new CustomerProduct(getTimeWithDaysAgo(10), "19510220159232", "19510220159232",
+				"19510220159232", getTimeWithDaysAgo(10), Product.Nexus_2.getCode(), Model.NEXUS_2_BLUE.getCode());
+		Problems problems = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "Battery Issue");
 		List<Problems> problemList = new ArrayList<Problems>();
 		problemList.add(problems);
-		
-	   createJobPayload = new CreateJobPayload(Service_Location.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer, customerAddress, customerProduct, problemList);
-		
+
+		createJobPayload = new CreateJobPayload(Service_Location.SERVICE_LOCATION_A.getCode(),
+				Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(), customer,
+				customerAddress, customerProduct, problemList);
+
 	}
-	
-	
-	
-	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke"})
+
+	@Test(description = "Verify if the createJob API response is able to create Unwarrranty job ", groups = { "api",
+			"regression", "smoke" })
 	public void createJobAPITEst() {
-		
-	Response response=	given()
-			.spec(requestSpecWithAuth(Role.FD, createJobPayload))
-			.when()
-			.post("/job/create")
-			.then()
-			.spec(responsSpec_OK())
-			.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
-			.body("message", equalTo("Job created successfully. "))
-			.body("data.mst_service_location_id", equalTo(1))
-			.body("data.job_number", startsWith("JOB_"))
-			.extract().response();//.body().jsonPath().getInt("data.tr_customer_id");
-	
+
+		Response response = given().spec(requestSpecWithAuth(Role.FD, createJobPayload)).when().post("/job/create")
+				.then().spec(responsSpec_OK())
+				.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
+				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))
+				.body("data.job_number", startsWith("JOB_")).extract().response();// .body().jsonPath().getInt("data.tr_customer_id");
+
 		int customerId = response.then().extract().body().jsonPath().getInt("data.tr_customer_id");
-		
+
 		CustomerDBModel customerDataFromDB = CustomerDao.getCustomerInfo(customerId);
 		System.out.println(customerDataFromDB);
-		
+
 		Assert.assertEquals(customer.first_name(), customerDataFromDB.getFirst_name());
 		Assert.assertEquals(customer.last_name(), customerDataFromDB.getLast_name());
 		Assert.assertEquals(customer.mobile_number(), customerDataFromDB.getMobile_number());
 		Assert.assertEquals(customer.mobile_number_alt(), customerDataFromDB.getMobile_number_alt());
 		Assert.assertEquals(customer.email_id(), customerDataFromDB.getEmail_id());
 		Assert.assertEquals(customer.email_id_alt(), customerDataFromDB.getEmail_id_alt());
-		
-		CustomerAddressDBModel customerAddressfromDB = CustomerAddressDao.getCustomerAddressData(customerDataFromDB.getTr_customer_address_id());
+
+		int tr_job_head_id = response.then().extract().jsonPath().getInt("data.id");
+
+		MapJobProblemModel JobDataFromDB = MapjobProblemDao.getProblemDetails(tr_job_head_id);
+		Assert.assertEquals(JobDataFromDB.getMst_problem_id(), createJobPayload.problems().get(0).id());
+		Assert.assertEquals(JobDataFromDB.getRemark(), createJobPayload.problems().get(0).remark());
+
+		CustomerAddressDBModel customerAddressfromDB = CustomerAddressDao
+				.getCustomerAddressData(customerDataFromDB.getTr_customer_address_id());
 		System.out.println(customerAddressfromDB);
 		Assert.assertEquals(customerAddressfromDB.getFlat_number(), customerAddress.flat_number());
 		Assert.assertEquals(customerAddressfromDB.getApartment_name(), customerAddress.apartment_name());
@@ -99,9 +105,9 @@ public class CreateJobAPIWithDBValidationTest {
 		Assert.assertEquals(customerAddressfromDB.getStreet_name(), customerAddress.street_name());
 		Assert.assertEquals(customerAddressfromDB.getCountry(), customerAddress.country());
 		Assert.assertEquals(customerAddressfromDB.getPincode(), customerAddress.pincode());
-		
+
 		int product_Id = response.then().extract().body().jsonPath().getInt("data.tr_customer_product_id");
-		
+
 		CustomerProductDBModel customerProductDBData = CustomerProductDao.getProductInfoFromDB(product_Id);
 		Assert.assertEquals(customerProductDBData.getImei1(), customerProduct.imei1());
 		Assert.assertEquals(customerProductDBData.getImei2(), customerProduct.imei2());
@@ -109,10 +115,6 @@ public class CreateJobAPIWithDBValidationTest {
 		Assert.assertEquals(customerProductDBData.getDop(), customerProduct.dop());
 		Assert.assertEquals(customerProductDBData.getPopurl(), customerProduct.popurl());
 		Assert.assertEquals(customerProductDBData.getMst_model_id(), customerProduct.mst_model_id());
-		
-		
-	
-		
-		
+
 	}
 }

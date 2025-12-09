@@ -26,9 +26,11 @@ import com.api.response.model.CreateJobResponseModel;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
 import com.database.dao.CustomerProductDao;
+import com.database.dao.MapjobProblemDao;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.MapJobProblemModel;
 
 import io.restassured.response.Response;
 
@@ -100,6 +102,12 @@ public class CreateJobAPIWithDBValidationTest2 {
 		Assert.assertEquals(customerAddressfromDB.getStreet_name(), customerAddress.street_name());
 		Assert.assertEquals(customerAddressfromDB.getCountry(), customerAddress.country());
 		Assert.assertEquals(customerAddressfromDB.getPincode(), customerAddress.pincode());
+		
+		int tr_job_head_id = createJobResponseModel.getData().getId();
+
+		MapJobProblemModel JobDataFromDB = MapjobProblemDao.getProblemDetails(tr_job_head_id);
+		Assert.assertEquals(JobDataFromDB.getMst_problem_id(), createJobPayload.problems().get(0).id());
+		Assert.assertEquals(JobDataFromDB.getRemark(), createJobPayload.problems().get(0).remark());
 		
 		int product_Id = createJobResponseModel.getData().getTr_customer_product_id();
 		
