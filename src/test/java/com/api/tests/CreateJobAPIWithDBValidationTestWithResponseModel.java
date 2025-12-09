@@ -41,7 +41,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 
-public class CreateJobAPIWithDBValidationTest2 {
+public class CreateJobAPIWithDBValidationTestWithResponseModel {
 	
 	private CreateJobPayload createJobPayload;
 	private Customer customer;
