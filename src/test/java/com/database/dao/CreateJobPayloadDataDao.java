@@ -58,6 +58,8 @@ LIMIT 5;
 				
 				""";
 	
+	private CreateJobPayloadDataDao() {}
+	
 	public static List<CreateJobBean>  getCreateJobPayLoadData() {
 		Connection conn=null;
 		Statement statement;
