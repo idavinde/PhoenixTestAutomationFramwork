@@ -32,7 +32,7 @@ public class CreateJobAPIDBDataDrivenTest {
 	
 	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","csv"},
 			dataProviderClass= com.dataproviders.DataProviderUtils.class,
-			dataProvider= "CreateJobAPIExcelDataProvider")
+			dataProvider= "CreateJobAPIDBDataProvider")
 	public void createJobAPITest(CreateJobPayload createJobPayload ) {
 		
 		given()

@@ -8,61 +8,89 @@ import java.sql.Statement;
 
 import com.api.utils.ConfigManager;
 import com.api.utils.EnvUtil;
+import com.api.utils.VaultDBConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseManager {
-	private static final String DB_URL = EnvUtil.getValue("DB_URL");
-	private static final String DB_USER = EnvUtil.getValue("DB_USER");
-	private static final String DB_PASSWORD = EnvUtil.getValue("DB_PASSWORD");
-	private static final int MAXIMUM_POOL_SIZE =Integer.parseInt(ConfigManager.getProperty("MAXIMUM_POOL_SIZE"));
-	private static final int MINIMUM_IDEL=Integer.parseInt(ConfigManager.getProperty("MINIMUM_IDEL"));
-	private static final int CONNECTION_TIMEOUT_IN_SEC=Integer.parseInt(ConfigManager.getProperty("CONNECTION_TIMEOUT_IN_SEC"));
-    private static final int IDEL_TIMEOUT_SECS =Integer.parseInt(ConfigManager.getProperty("IDEL_TIMEOUT_SECS"));
-    private static final int MAX_LIFE_TIME_IN_MINS =Integer.parseInt(ConfigManager.getProperty("MAX_LIFE_TIME_IN_MINS"));
-    private static final String HIKARI_CP_POOL_NAME = ConfigManager.getProperty("HIKARI_CP_POOL_NAME");
-    
+	private static boolean isVaultUp = true;
+	private static final String DB_URL = loadSecret("DB_URL");
+	private static final String DB_USER = loadSecret("DB_USER");
+	private static final String DB_PASSWORD = loadSecret("DB_PASSWORD");
+	private static final int MAXIMUM_POOL_SIZE = Integer.parseInt(ConfigManager.getProperty("MAXIMUM_POOL_SIZE"));
+	private static final int MINIMUM_IDEL = Integer.parseInt(ConfigManager.getProperty("MINIMUM_IDEL"));
+	private static final int CONNECTION_TIMEOUT_IN_SEC = Integer
+			.parseInt(ConfigManager.getProperty("CONNECTION_TIMEOUT_IN_SEC"));
+	private static final int IDEL_TIMEOUT_SECS = Integer.parseInt(ConfigManager.getProperty("IDEL_TIMEOUT_SECS"));
+	private static final int MAX_LIFE_TIME_IN_MINS = Integer
+			.parseInt(ConfigManager.getProperty("MAX_LIFE_TIME_IN_MINS"));
+	private static final String HIKARI_CP_POOL_NAME = ConfigManager.getProperty("HIKARI_CP_POOL_NAME");
+
 	private static HikariConfig hikariConfig;
 	private volatile static HikariDataSource hikariDataSource;
 
 	public static void intializePool() {
 		if (hikariDataSource == null) {
-			synchronized(DatabaseManager.class){
-			if (hikariDataSource == null) {
-				  
-				hikariConfig = new HikariConfig();
-				hikariConfig.setJdbcUrl(DB_URL);
-				hikariConfig.setUsername(DB_USER);
-				hikariConfig.setPassword(DB_PASSWORD);
-				hikariConfig.setMaximumPoolSize(MAXIMUM_POOL_SIZE);
-				hikariConfig.setMinimumIdle(MINIMUM_IDEL);
-				hikariConfig.setConnectionTimeout(CONNECTION_TIMEOUT_IN_SEC *1000); //10 sec
-				hikariConfig.setIdleTimeout(IDEL_TIMEOUT_SECS * 1000);
-				hikariConfig.setMaxLifetime(MAX_LIFE_TIME_IN_MINS *60*1000); // 30*60*1000
-				hikariConfig.setPoolName(HIKARI_CP_POOL_NAME);
-				
-				hikariDataSource = new HikariDataSource(hikariConfig);
-				
-			 }
+			synchronized (DatabaseManager.class) {
+				if (hikariDataSource == null) {
+
+					hikariConfig = new HikariConfig();
+					hikariConfig.setJdbcUrl(DB_URL);
+					hikariConfig.setUsername(DB_USER);
+					hikariConfig.setPassword(DB_PASSWORD);
+					hikariConfig.setMaximumPoolSize(MAXIMUM_POOL_SIZE);
+					hikariConfig.setMinimumIdle(MINIMUM_IDEL);
+					hikariConfig.setConnectionTimeout(CONNECTION_TIMEOUT_IN_SEC * 1000); // 10 sec
+					hikariConfig.setIdleTimeout(IDEL_TIMEOUT_SECS * 1000);
+					hikariConfig.setMaxLifetime(MAX_LIFE_TIME_IN_MINS * 60 * 1000); // 30*60*1000
+					hikariConfig.setPoolName(HIKARI_CP_POOL_NAME);
+
+					hikariDataSource = new HikariDataSource(hikariConfig);
+
+				}
 			}
 		}
 	}
-	
+
 	public static Connection getConnection() throws SQLException {
 		Connection connection = null;
-		if(hikariDataSource==null) {
-			
+		if (hikariDataSource == null) {
+
 			intializePool();
 		}
-		
-		else if(hikariDataSource.isClosed()) {
-			
+
+		else if (hikariDataSource.isClosed()) {
+
 			throw new SQLException("HIKARI DATA SOURCE IS CLOSED");
 		}
-		
-			connection = hikariDataSource.getConnection();
-		
-		
+
+		connection = hikariDataSource.getConnection();
+
 		return connection;
+	}
+
+	public static String loadSecret(String key) {
+		String value = null;
+		
+		if(isVaultUp) {
+			
+			 value = VaultDBConfig.getSecret(key);
+		
+			if(value==null) {
+			System.err.println("Vault is Down! or some issue with vault");
+			isVaultUp=false;
+		}
+		
+		else {
+			
+			System.out.println("READING VALUE FROM VAULT");
+			return value;
+			}
+		}
+		
+		System.out.println("READING VALUE FROM ENV");
+		value = EnvUtil.getValue(key);
+		
+		return value;
 	}
 }
