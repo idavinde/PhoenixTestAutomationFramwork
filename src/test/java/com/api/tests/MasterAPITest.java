@@ -1,7 +1,11 @@
 package com.api.tests;
 
 import static org.hamcrest.Matchers.*;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.api.services.MasterService;
 
 import static com.api.constants.Role.*;
 import static com.api.utils.SpecUtil.*;
@@ -12,14 +16,21 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static io.restassured.RestAssured.*;
 
 public class MasterAPITest {
+	private MasterService masterService;
+	
+	@BeforeMethod(description="Intentiating the master service object")
+	public void setUp() {
+		
+		masterService = new MasterService();
+	}
+	
+	
+	
 	
 	@Test (description="Verify if the master API is giving correct response", groups= {"api","regression","smoke"})
 	public void verifyMasterAPIResponse() {
 		
-		given()
-			.spec(requestSpecWithAuth(FD))
-			.when()
-			.post("master")
+		masterService.master(FD)
 			.then()
 			.spec(responsSpec_OK())
 			.body("message", equalTo("Success"))

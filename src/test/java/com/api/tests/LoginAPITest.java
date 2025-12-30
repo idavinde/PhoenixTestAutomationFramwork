@@ -21,24 +21,23 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 
 public class LoginAPITest {
-	
+
 	private UserCredentials usercredentials;
 	private AuthService authService;
-	
-	@BeforeMethod (description = "Create the Payload for the Login API")
+
+	@BeforeMethod(description = "Create the Payload for the Login API")
 	public void setup() {
-		
-		usercredentials = new UserCredentials("iamfd", "password");	
+
+		usercredentials = new UserCredentials("iamfd", "password");
 		authService = new AuthService();
 	}
-	
-	
-	@Test(description="Verify if login is working for user iamfd", groups= {"api","regression","smoke"})
+
+	@Test(description = "Verify if login is working for user iamfd", groups = { "api", "regression", "smoke" })
 	public void loginAPITest() throws IOException {
 	
 	
-		authService.login(usercredentials)
-		.then()
+			authService.login(usercredentials)
+			.then()
 			.spec(responsSpec_OK())
 			.body("message", equalTo("Success"))
 			.and()
