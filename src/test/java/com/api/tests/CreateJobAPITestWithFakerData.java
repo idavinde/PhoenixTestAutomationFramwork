@@ -22,6 +22,7 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
+import com.api.services.JobService;
 import com.api.utils.FakerDataGenerator;
 import com.database.dao.CustomerAddressDao;
 import com.database.dao.CustomerDao;
@@ -36,13 +37,15 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static io.restassured.RestAssured.*;
 
 public class CreateJobAPITestWithFakerData {
-
+	
+	private JobService jobService;
 	private CreateJobPayload createJobPayload;
 
-	@BeforeMethod(description = "Creating creatjob api request payload")
+	@BeforeMethod(description = "Creating creatjob api request payload and Instantiating the job Service")
 	public void setup() {
 
 		createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
+		jobService = new JobService();
 
 	}
 
@@ -50,7 +53,7 @@ public class CreateJobAPITestWithFakerData {
 			"regression", "smoke" })
 	public void createJobAPITEst() {
 
-		int customerId = given().spec(requestSpecWithAuth(Role.FD, createJobPayload)).when().post("/job/create").then()
+		int customerId = jobService.createJob(Role.FD, createJobPayload).then()
 				.spec(responsSpec_OK())
 				.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
 				.body("message", equalTo("Job created successfully. ")).body("data.mst_service_location_id", equalTo(1))

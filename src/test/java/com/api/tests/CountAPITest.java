@@ -4,7 +4,12 @@ import static io.restassured.RestAssured.*;
 
 
 import static org.hamcrest.Matchers.*;
+
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.api.services.DashboardService;
+import com.api.services.UserService;
 
 import static com.api.constants.Role.*;
 import static com.api.utils.SpecUtil.*;
@@ -12,15 +17,21 @@ import static com.api.utils.SpecUtil.*;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
-@Test (description="Verify if the count API response is shown correctly", groups= {"api","regression","smoke"})
-public class CountAPITest {
 
+
+public class CountAPITest {
+	
+	private DashboardService dashboardService;
+
+	@BeforeMethod(description="Intializing the userdetails services")
+	public void setup() {
+		dashboardService = new DashboardService();
+	}
+
+	@Test (description="Verify if the count API response is shown correctly", groups= {"api","regression","smoke"})
 	public void verifyCountAPIResponse() {
 			
-		given()
-			.spec(requestSpecWithAuth(FD))
-			.when()
-			.get("/dashboard/count")
+			dashboardService.count(FD)
 			.then()
 			.spec(responsSpec_OK())
 			.body("message", equalTo("Success"))

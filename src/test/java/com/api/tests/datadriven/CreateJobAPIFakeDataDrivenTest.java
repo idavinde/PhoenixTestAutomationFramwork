@@ -21,6 +21,8 @@ import com.api.request.model.Customer;
 import com.api.request.model.CustomerAddress;
 import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
+import com.api.services.JobService;
+
 import static com.api.utils.DateTimeUtil.*;
 import static com.api.utils.SpecUtil.*;
 
@@ -29,18 +31,18 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static io.restassured.RestAssured.*;
 
 public class CreateJobAPIFakeDataDrivenTest {
+	private JobService jobService;
 	
-
-	
+	@BeforeMethod(description="Instantiating the job Service")
+	public void setUp() {
+		jobService = new JobService();
+	}
 	
 	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke","faker"},
 			dataProviderClass = com.dataproviders.DataProviderUtils.class, dataProvider = "createJobAPIFakerDataProvider")
 	public void createJobAPITEst(CreateJobPayload createJobPayload) {
 		
-		given()
-			.spec(requestSpecWithAuth(Role.FD, createJobPayload))
-			.when()
-			.post("/job/create")
+		jobService.createJob(Role.FD, createJobPayload)
 			.then()
 			.spec(responsSpec_OK())
 			.body(matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
