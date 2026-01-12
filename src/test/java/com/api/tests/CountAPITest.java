@@ -46,10 +46,7 @@ public class CountAPITest {
 	@Test (description="Verify if the count API response is shown correctly", groups= {"api","neagtive","regression","smoke"})
 	public void countAPI_MisiingAuthToken() {
 		
-		given()
-			.spec(requestSpec())
-			.when()
-			.get("/dashboard/count")
+		dashboardService.countWithNoAuth()
 			.then()
 			.spec(responsSpec_TEXT(401));
 	}
