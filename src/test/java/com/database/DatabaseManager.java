@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.api.utils.ConfigManager;
 import com.api.utils.EnvUtil;
 import com.api.utils.VaultDBConfig;
@@ -13,6 +16,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class DatabaseManager {
+	private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
 	private static boolean isVaultUp = true;
 	private static final String DB_URL = loadSecret("DB_URL");
 	private static final String DB_USER = loadSecret("DB_USER");
@@ -29,8 +33,11 @@ public class DatabaseManager {
 	private static HikariConfig hikariConfig;
 	private volatile static HikariDataSource hikariDataSource;
 
+	
+	
 	public static void intializePool() {
 		if (hikariDataSource == null) {
+			LOGGER.warn("Database Connection is not available... Creaating HikariDataSource");
 			synchronized (DatabaseManager.class) {
 				if (hikariDataSource == null) {
 
@@ -46,6 +53,7 @@ public class DatabaseManager {
 					hikariConfig.setPoolName(HIKARI_CP_POOL_NAME);
 
 					hikariDataSource = new HikariDataSource(hikariConfig);
+					LOGGER.info("Hikari Datasource created!!");
 
 				}
 			}
@@ -55,12 +63,13 @@ public class DatabaseManager {
 	public static Connection getConnection() throws SQLException {
 		Connection connection = null;
 		if (hikariDataSource == null) {
-
+			LOGGER.info("Intializing the Database Connection using HikariCP");
 			intializePool();
 		}
 
 		else if (hikariDataSource.isClosed()) {
-
+			
+			LOGGER.error("HIKARI DATA SOURCE IS CLOSED");
 			throw new SQLException("HIKARI DATA SOURCE IS CLOSED");
 		}
 
@@ -77,18 +86,21 @@ public class DatabaseManager {
 			 value = VaultDBConfig.getSecret(key);
 		
 			if(value==null) {
-			System.err.println("Vault is Down! or some issue with vault");
+		
+			LOGGER.error("Vault is Down! or some issue with vault");
 			isVaultUp=false;
 		}
 		
 		else {
 			
-			System.out.println("READING VALUE FROM VAULT");
+			
+			LOGGER.info("READING VALUE FOR KEY {} FROM VAULT", key);
 			return value;
 			}
 		}
 		
-		System.out.println("READING VALUE FROM ENV");
+		
+		LOGGER.info("READING VALUE FROM ENV");
 		value = EnvUtil.getValue(key);
 		
 		return value;
