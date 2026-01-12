@@ -9,26 +9,28 @@ import java.io.IOException;
 
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.request.model.UserCredentials;
 import com.api.services.AuthService;
+import com.dataproviders.api.bean.UserBean;
 
 import static com.api.utils.SpecUtil.*;
 
 
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
-
+@Listeners(com.listener.APITestListerner.class)
 public class LoginAPITest {
 
-	private UserCredentials usercredentials;
+	private UserBean usercredentials;
 	private AuthService authService;
 
 	@BeforeMethod(description = "Create the Payload for the Login API")
 	public void setup() {
 
-		usercredentials = new UserCredentials("iamfd", "password");
+		usercredentials = new UserBean("iamfd", "password");
 		authService = new AuthService();
 	}
 
