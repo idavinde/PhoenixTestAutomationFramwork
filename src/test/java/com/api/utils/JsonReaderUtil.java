@@ -35,7 +35,7 @@ public class JsonReaderUtil {
 			
 		} catch (IOException e) {
 			
-			LOGGER.error("Cannot read the json from the file {}" , fileName);
+			LOGGER.error("Cannot read the json from the file {}" ,fileName, e);
 			e.printStackTrace();
 		}
 		
