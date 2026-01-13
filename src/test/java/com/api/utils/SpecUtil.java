@@ -47,7 +47,6 @@ public class SpecUtil {
 		.log(LogDetail.URI)
 		.log(LogDetail.METHOD)
 		.log(LogDetail.HEADERS)
-		.log(LogDetail.BODY)
 		.build();
 		
 		return requestSpecification;
@@ -61,7 +60,7 @@ public class SpecUtil {
 		.expectContentType(ContentType.JSON)
 		.expectStatusCode(200)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
+		
 		.build();
 		
 		return responseSpecification;
@@ -111,7 +110,7 @@ public static ResponseSpecification responsSpec_TEXT(int statusCode) {
 		ResponseSpecification responseSpecification =new ResponseSpecBuilder()
 		.expectStatusCode(statusCode)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
+		
 		.build();
 		
 		return responseSpecification;
@@ -123,7 +122,6 @@ public static ResponseSpecification responsSpec_JSON(int statusCode) {
 		.expectContentType(ContentType.JSON)
 		.expectStatusCode(statusCode)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
 		.build();
 		
 		return responseSpecification;
