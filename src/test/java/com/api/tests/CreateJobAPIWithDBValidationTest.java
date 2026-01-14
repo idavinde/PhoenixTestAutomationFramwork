@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.constants.Model;
@@ -40,7 +41,7 @@ import static com.api.utils.SpecUtil.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
-
+@Listeners(com.listener.APITestListerner.class)
 public class CreateJobAPIWithDBValidationTest {
 	
 	private JobService jobService;

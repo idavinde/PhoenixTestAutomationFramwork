@@ -6,6 +6,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.api.services.DashboardService;
@@ -18,7 +19,7 @@ import static com.api.utils.SpecUtil.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 
-
+@Listeners(com.listener.APITestListerner.class)
 public class CountAPITest {
 	
 	private DashboardService dashboardService;
