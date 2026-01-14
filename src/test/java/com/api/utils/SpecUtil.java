@@ -12,6 +12,7 @@ import static com.api.utils.ConfigManager.*;
 import org.hamcrest.Matchers;
 
 import com.api.constants.Role;
+import com.api.filters.SensitiveDataFilter;
 import com.api.request.model.UserCredentials;
 
 public class SpecUtil {
@@ -23,10 +24,6 @@ public class SpecUtil {
 		.setBaseUri(getProperty("BASE_URI"))
 		.setContentType(ContentType.JSON)
 		.setAccept(ContentType.JSON)
-		.log(LogDetail.URI)
-		.log(LogDetail.METHOD)
-		.log(LogDetail.HEADERS)
-		.log(LogDetail.BODY)
 		.build();
 		
 		return requestSpecification;
@@ -42,10 +39,7 @@ public class SpecUtil {
 		.setContentType(ContentType.JSON)
 		.setAccept(ContentType.JSON)
 		.setBody(payload)
-		.log(LogDetail.URI)
-		.log(LogDetail.METHOD)
-		.log(LogDetail.HEADERS)
-		.log(LogDetail.BODY)
+		.addFilter(new SensitiveDataFilter())
 		.build();
 		
 		return requestSpecification;
@@ -59,7 +53,7 @@ public class SpecUtil {
 		.expectContentType(ContentType.JSON)
 		.expectStatusCode(200)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
+		
 		.build();
 		
 		return responseSpecification;
@@ -73,10 +67,7 @@ public class SpecUtil {
 		.setContentType(ContentType.JSON)
 		.setAccept(ContentType.JSON)
 		.addHeader("Authorization", AuthTokenProvider.getToken(role))
-		.log(LogDetail.URI)
-		.log(LogDetail.METHOD)
-		.log(LogDetail.HEADERS)
-		.log(LogDetail.BODY)
+		.addFilter(new SensitiveDataFilter())
 		.build();
 		
 		return requestSpecification;
@@ -93,10 +84,7 @@ public class SpecUtil {
 		.setAccept(ContentType.JSON)
 		.addHeader("Authorization", AuthTokenProvider.getToken(role))
 		.setBody(Payload)
-		.log(LogDetail.URI)
-		.log(LogDetail.METHOD)
-		.log(LogDetail.HEADERS)
-		.log(LogDetail.BODY)
+		.addFilter(new SensitiveDataFilter())
 		.build();
 		
 		return requestSpecification;
@@ -109,7 +97,7 @@ public static ResponseSpecification responsSpec_TEXT(int statusCode) {
 		ResponseSpecification responseSpecification =new ResponseSpecBuilder()
 		.expectStatusCode(statusCode)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
+		
 		.build();
 		
 		return responseSpecification;
@@ -121,7 +109,6 @@ public static ResponseSpecification responsSpec_JSON(int statusCode) {
 		.expectContentType(ContentType.JSON)
 		.expectStatusCode(statusCode)
 		.expectResponseTime(Matchers.lessThan(2000L))
-		.log(LogDetail.ALL)
 		.build();
 		
 		return responseSpecification;
