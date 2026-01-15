@@ -24,6 +24,13 @@ import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
 import com.api.services.JobService;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+
 import static com.api.utils.DateTimeUtil.*;
 import static com.api.utils.SpecUtil.*;
 
@@ -31,6 +38,8 @@ import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import static io.restassured.RestAssured.*;
 @Listeners(com.listener.APITestListerner.class)
+@Epic("Job Managment")
+@Feature("Job creation")
 public class CreateJobAPITest {
 	
 	private JobService jobService;
@@ -51,9 +60,11 @@ public class CreateJobAPITest {
 		jobService = new JobService();
 	}
 	
+	@Story("FD should be able to create job")
+	@Description("Verifying if FD is able to use create job api and In wraranty job is creaated")
+	@Severity(SeverityLevel.BLOCKER)
 	
-	
-	@Test (description="Verify if the createJob API response is able to create Unwarrranty job ", groups= {"api","regression","smoke"})
+	@Test (description="Verifying if FD is able to use create job api and In wraranty job is creaated ", groups= {"api","regression","smoke"})
 	public void createJobAPITEst() {
 		
 		jobService.createJob(Role.FD, createJobPayload)
