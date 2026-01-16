@@ -5,13 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.sound.midi.SysexMessage;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.database.DatabaseManager;
 import com.database.model.MapJobProblemModel;
+
+import io.qameta.allure.Step;
 
 public class MapjobProblemDao {
 	private static final Logger LOGGER = LogManager.getLogger(MapjobProblemDao.class);
@@ -24,6 +24,7 @@ public class MapjobProblemDao {
 		
 	}
 	
+	@Step("Retriving the Problem details Information from DB for the specific job head id")
 	public static MapJobProblemModel getProblemDetails(int tr_job_head_id) {
 		Connection conn;
 		PreparedStatement preparedStatement;

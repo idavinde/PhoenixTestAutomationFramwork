@@ -10,6 +10,8 @@ import com.bettercloud.vault.VaultConfig;
 import com.bettercloud.vault.VaultException;
 import com.bettercloud.vault.response.LogicalResponse;
 
+import io.qameta.allure.Step;
+
 public class VaultDBConfig {
 
 	private static VaultConfig vaultConfig;
@@ -19,11 +21,11 @@ public class VaultDBConfig {
 	static {
 
 		try {
-			
+
 			vaultConfig = new VaultConfig().address("http://54.172.23.107:8200/").token("root").build();
-			
+
 		} catch (VaultException e) {
-			
+
 			LOGGER.error("Something went wrong with the Vault Config", e);
 			e.printStackTrace();
 		}
@@ -36,22 +38,23 @@ public class VaultDBConfig {
 
 	}
 
+	@Step("Retrieving the secret from the vault")
 	public static String getSecret(String key) {
-		
+
 		LogicalResponse response = null;
-		
+
 		try {
-			
-			 response = vault.logical().read("secret/phoenix/qa/database");
-			
+
+			response = vault.logical().read("secret/phoenix/qa/database");
+
 		} catch (VaultException e) {
 			LOGGER.error("Something went wrong reading of the vault response", e);
 			e.printStackTrace();
 			return null;
 		}
-		
-		Map<String, String> dataMap= response.getData();
-		
+
+		Map<String, String> dataMap = response.getData();
+
 		LOGGER.info("Secret found in the valut");
 		return dataMap.get(key);
 

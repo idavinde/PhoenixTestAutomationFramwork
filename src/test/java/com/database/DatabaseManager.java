@@ -1,10 +1,7 @@
 package com.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +11,8 @@ import com.api.utils.EnvUtil;
 import com.api.utils.VaultDBConfig;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
+import io.qameta.allure.Step;
 
 public class DatabaseManager {
 	private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);
@@ -32,9 +31,8 @@ public class DatabaseManager {
 
 	private static HikariConfig hikariConfig;
 	private volatile static HikariDataSource hikariDataSource;
-
 	
-	
+	@Step("Intializing the Database Connection Pool")
 	public static void intializePool() {
 		if (hikariDataSource == null) {
 			LOGGER.warn("Database Connection is not available... Creaating HikariDataSource");
@@ -59,7 +57,8 @@ public class DatabaseManager {
 			}
 		}
 	}
-
+	
+	@Step("Getting the Database Connection")
 	public static Connection getConnection() throws SQLException {
 		Connection connection = null;
 		if (hikariDataSource == null) {
@@ -68,7 +67,7 @@ public class DatabaseManager {
 		}
 
 		else if (hikariDataSource.isClosed()) {
-			
+
 			LOGGER.error("HIKARI DATA SOURCE IS CLOSED");
 			throw new SQLException("HIKARI DATA SOURCE IS CLOSED");
 		}
@@ -77,32 +76,31 @@ public class DatabaseManager {
 
 		return connection;
 	}
-
+	
+	@Step("Loading Database Secrets")
 	public static String loadSecret(String key) {
 		String value = null;
-		
-		if(isVaultUp) {
-			
-			 value = VaultDBConfig.getSecret(key);
-		
-			if(value==null) {
-		
-			LOGGER.error("Vault is Down! or some issue with vault");
-			isVaultUp=false;
-		}
-		
-		else {
-			
-			
-			LOGGER.info("READING VALUE FOR KEY {} FROM VAULT", key);
-			return value;
+
+		if (isVaultUp) {
+
+			value = VaultDBConfig.getSecret(key);
+
+			if (value == null) {
+
+				LOGGER.error("Vault is Down! or some issue with vault");
+				isVaultUp = false;
+			}
+
+			else {
+
+				LOGGER.info("READING VALUE FOR KEY {} FROM VAULT", key);
+				return value;
 			}
 		}
-		
-		
+
 		LOGGER.info("READING VALUE FROM ENV");
 		value = EnvUtil.getValue(key);
-		
+
 		return value;
 	}
 }

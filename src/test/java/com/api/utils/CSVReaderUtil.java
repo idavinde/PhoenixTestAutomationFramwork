@@ -8,35 +8,34 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.dataproviders.api.bean.UserBean;
+
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
+import io.qameta.allure.Step;
+
 public class CSVReaderUtil {
 	private static final Logger LOGGER = LogManager.getLogger(CSVReaderUtil.class);
+
 	private CSVReaderUtil() {
-		
+
 	}
-	
-public static <T> Iterator<T> loadCSV(String pathOfCSVFile, Class<T> bean) {
-	
-	LOGGER.info("Converting the CSV file from the path", pathOfCSVFile);
+	@Step("Loading the test data from the CSV file")
+	public static <T> Iterator<T> loadCSV(String pathOfCSVFile, Class<T> bean) {
+
+		LOGGER.info("Converting the CSV file from the path", pathOfCSVFile);
 		InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(pathOfCSVFile);
 		InputStreamReader isr = new InputStreamReader(is);
 		CSVReader csvReader = new CSVReader(isr);
-	
+
 		LOGGER.info("Converting the CSV to the bean Class{}", bean);
-		CsvToBean<T> csvToBean = new CsvToBeanBuilder(csvReader)
-				.withType(bean)
-				.withIgnoreEmptyLine(true)
-				.build();
-		
-		List<T> userList= csvToBean.parse();
-		
+		CsvToBean<T> csvToBean = new CsvToBeanBuilder(csvReader).withType(bean).withIgnoreEmptyLine(true).build();
+
+		List<T> userList = csvToBean.parse();
+
 		return userList.iterator();
-		
-		
+
 	}
 
 }

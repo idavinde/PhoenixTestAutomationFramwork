@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.qameta.allure.Step;
+
 public class ConfigManager {
 
 	private static Properties prop = new Properties();
@@ -63,7 +65,8 @@ public class ConfigManager {
 			LOGGER.error("Something went wrong.. please check the file{}",path, e);
 		}
 	}
-
+	
+	@Step("Getting the Property Value from the config file")
 	public static String getProperty(String key) {
 
 		return prop.getProperty(key);

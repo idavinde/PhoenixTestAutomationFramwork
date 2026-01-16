@@ -1,5 +1,6 @@
 package com.api.utils;
 
+import io.qameta.allure.Step;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -16,7 +17,7 @@ import com.api.filters.SensitiveDataFilter;
 import com.api.request.model.UserCredentials;
 
 public class SpecUtil {
-	
+	@Step("Setting up the BaseURi, Content Type as Application/JSON and attaching the Sensitive Data Filter")
 	public static RequestSpecification requestSpec() {
 		//To take care of common request sections (methods)
 		
@@ -30,7 +31,7 @@ public class SpecUtil {
 		
 		
 	}
-	
+	@Step("Setting up the BaseURi, Content Type as Application/JSON and attaching the Sensitive Data Filter")
 	public static RequestSpecification requestSpec(Object payload) {
 		//To take care of common request sections (methods)
 		
@@ -47,6 +48,7 @@ public class SpecUtil {
 		
 	}
 	
+	@Step("Expecting the response to have Content Type as Application/JSON, Statuc 200 and Response time is less than 2000 ms")
 	public static ResponseSpecification responsSpec_OK() {
 		
 		ResponseSpecification responseSpecification =new ResponseSpecBuilder()
@@ -59,6 +61,7 @@ public class SpecUtil {
 		return responseSpecification;
 	}
 	
+	@Step("Setting up the BaseURi, Content Type as Application/JSON and attaching the Sensitive Data Filter for role")
 	public static RequestSpecification requestSpecWithAuth(Role role) {
 		//To take care of common request sections (methods)
 		
@@ -75,6 +78,7 @@ public class SpecUtil {
 		
 	}
 	
+	@Step("Setting up the BaseURi, Content Type as Application/JSON and attaching the Sensitive Data Filter for role and attaching payload")
 	public static RequestSpecification requestSpecWithAuth(Role role, Object Payload ) {
 		//To take care of common request sections (methods)
 		
@@ -92,6 +96,7 @@ public class SpecUtil {
 		
 	}
 	
+	@Step("Expecting the response to have Content Type as Text, Statuc 200 and Response time is less than 2000 ms and status code")
 public static ResponseSpecification responsSpec_TEXT(int statusCode) {
 		
 		ResponseSpecification responseSpecification =new ResponseSpecBuilder()
@@ -103,6 +108,7 @@ public static ResponseSpecification responsSpec_TEXT(int statusCode) {
 		return responseSpecification;
 	}
 	
+@Step("Expecting the response to have Content Type as Application/JSON, Statuc 200 and Response time is less than 2000 ms and status code")
 public static ResponseSpecification responsSpec_JSON(int statusCode) {
 		
 		ResponseSpecification responseSpecification =new ResponseSpecBuilder()
