@@ -16,12 +16,21 @@ import com.api.request.model.UserCredentials;
 import com.api.services.AuthService;
 import com.dataproviders.api.bean.UserBean;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+
 import static com.api.utils.SpecUtil.*;
 
 
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 @Listeners(com.listener.APITestListerner.class)
+@Epic("User Managment")
+@Feature("Authentication")
 public class LoginAPITest {
 
 	private UserBean usercredentials;
@@ -33,7 +42,9 @@ public class LoginAPITest {
 		usercredentials = new UserBean("iamfd", "password");
 		authService = new AuthService();
 	}
-
+	@Story("Valid User should be able to login into the system")
+	@Description("Verify if FD user is able to login via api")
+	@Severity(SeverityLevel.BLOCKER)
 	@Test(description = "Verify if login is working for user iamfd", groups = { "api", "regression", "smoke" })
 	public void loginAPITest() throws IOException {
 	

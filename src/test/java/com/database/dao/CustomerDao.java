@@ -4,13 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.database.DatabaseManager;
 import com.database.model.CustomerDBModel;
+
+import io.qameta.allure.Step;
 
 public class CustomerDao {
 	private static final Logger LOGGER = LogManager.getLogger(CustomerDao.class);
@@ -20,7 +21,7 @@ public class CustomerDao {
 	
 	private CustomerDao() {}
 	
-	
+	@Step("Retriving the customer Information from DB for the specific customer id")
 	public static CustomerDBModel  getCustomerInfo(int customerID)  {
 		Connection conn;
 		CustomerDBModel customerDBModel = null;

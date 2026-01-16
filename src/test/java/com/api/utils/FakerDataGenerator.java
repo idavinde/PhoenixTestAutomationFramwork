@@ -16,8 +16,10 @@ import com.api.request.model.CustomerProduct;
 import com.api.request.model.Problems;
 import com.github.javafaker.Faker;
 
+import io.qameta.allure.Step;
+
 public class FakerDataGenerator {
-	
+
 	private static final Faker faker = new Faker(new Locale("en-IND"));
 	private static final String COUNTRY = "India";
 	private static final Random RANDOM = new Random();
@@ -27,14 +29,17 @@ public class FakerDataGenerator {
 	private static final int MST_OEM_ID = 1;
 	private static final int PRODUCT_ID = 1;
 	private static final int MST_MODEL_ID = 1;
-	private static final int [] VALID_PROBLEM_ID = {1,2,3,4,5,6,7,8,9,10,11,12,15,16,17,19,20,22,24,26,27,28,29};
+	private static final int[] VALID_PROBLEM_ID = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 17, 19, 20, 22, 24,
+			26, 27, 28, 29 };
 	private static final Logger LOGGER = LogManager.getLogger(FakerDataGenerator.class);
+
 	private FakerDataGenerator() {
 
 	}
 
+	@Step("Generating Fake Create Job Data")
 	public static CreateJobPayload generateFakeCreateJobData() {
-         LOGGER.info("Generating the fake payload for create job");
+		LOGGER.info("Generating the fake payload for create job");
 		Customer customer = generateFakeCustomerData();
 		CustomerAddress customerAddress = generateFakeCustomerAddressData();
 		CustomerProduct customerProduct = generateFakeCustomerProductData();
@@ -44,12 +49,12 @@ public class FakerDataGenerator {
 		return payload;
 	}
 
+	@Step("Generating multiple Fake Create Job Data with count")
 	public static Iterator<CreateJobPayload> generateFakeCreateJobData(int count) {
-		
-		LOGGER.info("Generating the fake {} payload for create job" , count);
+
+		LOGGER.info("Generating the fake {} payload for create job", count);
 		List<CreateJobPayload> payloadList = new ArrayList<>();
-		
-		
+
 		for (int i = 0; i < count; i++) {
 			Customer customer = generateFakeCustomerData();
 			CustomerAddress customerAddress = generateFakeCustomerAddressData();
@@ -61,26 +66,28 @@ public class FakerDataGenerator {
 		}
 		return payloadList.iterator();
 	}
-
+	
+	@Step("Generating Fake Problem List for the Create Job Payload")
 	private static List<Problems> generateFakeProblemsList() {
-		
-		int count = RANDOM.nextInt(3)+1;
+
+		int count = RANDOM.nextInt(3) + 1;
 		String fakeRemark;
 		int randomIndex;
 		int problemId;
 		Problems problems;
 		List<Problems> problemList = new ArrayList<Problems>();
-		for(int i=1;i<=count;i++) {
-		 fakeRemark = faker.lorem().sentence(5);
-		 randomIndex= RANDOM.nextInt(VALID_PROBLEM_ID.length);
-		 problemId = VALID_PROBLEM_ID[randomIndex];
+		for (int i = 1; i <= count; i++) {
+			fakeRemark = faker.lorem().sentence(5);
+			randomIndex = RANDOM.nextInt(VALID_PROBLEM_ID.length);
+			problemId = VALID_PROBLEM_ID[randomIndex];
 
-		 problems = new Problems(problemId, fakeRemark);
-		 problemList.add(problems);
+			problems = new Problems(problemId, fakeRemark);
+			problemList.add(problems);
 		}
 		return problemList;
 	}
-
+	
+	@Step("Generating Fake Customer product Info")
 	private static CustomerProduct generateFakeCustomerProductData() {
 
 		String dop = DateTimeUtil.getTimeWithDaysAgo(0);
@@ -92,7 +99,8 @@ public class FakerDataGenerator {
 
 		return customerProduct;
 	}
-
+	
+	@Step("Generating Fake address Info")
 	private static CustomerAddress generateFakeCustomerAddressData() {
 		String flatNumber = faker.numerify("###");
 		String apartmentName = faker.address().streetName();
@@ -108,7 +116,8 @@ public class FakerDataGenerator {
 
 		return customerAddress;
 	}
-
+	
+	@Step("Generating Fake customer data Info")
 	private static Customer generateFakeCustomerData() {
 
 		String firstName = faker.name().firstName();
