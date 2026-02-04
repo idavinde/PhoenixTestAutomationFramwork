@@ -62,6 +62,10 @@ jobs:
       if: always()
       run: mvn allure:report
 
+    - name: Verify Allure report contents
+      if: always()
+      run: ls -la target/site/allure-maven-plugin
+
     - name: Deploy Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v4
