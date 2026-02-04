@@ -25,7 +25,7 @@
 					</systemPropertyVariables>
 
 					<argLine>
-						-javaagent:${user.home}/.m2/repository/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar
+						-javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.jar
 					</argLine>
 
 				</configuration>
