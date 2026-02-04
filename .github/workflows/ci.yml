@@ -20,11 +20,10 @@ on:
         options: [qa,uat,dev]
         default: qa
         required: true
-
       suiteXmlFile:
-        description: "TestNG XML File"
+        description: "TestNG Xml File"
         type: choice
-        options: [sanity.xml, testng.xml, regression.xml , smoke.xml, testng-datadriven.xml]
+        options: [testng.xml,smoke.xml,regression.xml,testng-datadriven.xml]
         default: testng.xml
         required: true
         
@@ -57,6 +56,21 @@ jobs:
     
     - name: Execute Test Automation framework
       run: mvn clean test -DsuiteXmlFile="${{ steps.default.outputs.suiteXmlFile }}" -Denv="${{ steps.default.outputs.env }}"
+
+    - name: Generating Allure Report
+      if: always()
+      run: mvn allure:report
+
+    - name: Verify Allure report contents
+      if: always()
+      run: ls -la target/site/allure-maven-plugin
+
+    - name: Deploy Report to GitHub Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: target/site/allure-maven-plugin
 
     - name: Upload a Build Artifact
       if: always()
