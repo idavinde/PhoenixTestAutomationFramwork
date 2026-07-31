@@ -6,7 +6,7 @@ The framework uses different libraries and tools to support API testing, data-dr
 
 ## 🚀 About Me
 
-Hi, my name is **Davinder Raju**, and I have more than 6 years of experience in automation testing using technologies such as Selenium WebDriver, Rest Assured, Appium, TestNG, and Java.
+Hi, my name is **Davinder Raju**, and I have more than 6 years of experience in automation testing using technologies such as Selenium WebDriver, Rest Assured, Playwright, TestNG, JavaScript and Java.
 
 My major expertise is in the Java programming language and developing scalable test automation frameworks.
 
